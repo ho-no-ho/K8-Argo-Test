@@ -1,0 +1,27 @@
+repositories:
+ - name: grafana_repo_name
+   url: https://grafana.github.io/helm-charts 
+
+releases:
+- name: grafananame
+  namespace: grafa-space
+  chart: grafana/grafana
+  values:
+    - dashboardsConfigMaps:
+    - dashboardProviders:
+         dashboardproviders.yaml:
+            apiVersion: 1
+            providers:
+              - name: 'default'
+                orgId: 1
+                folder: ''
+                type: file
+                disableDeletion: false
+                editable: true
+                options:
+                  path: /var/lib/grafana/dashboards/default
+    - dashboards:
+        default:
+{{ range $index,$item := (readDir "./dash/json_folder/")}}
+  {{- readFile $item | nindent 12 -}}
+{{- end }}
